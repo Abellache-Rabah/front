@@ -24,6 +24,7 @@ export function CreatePost() {
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const [username, setUsername] = useState("");
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
@@ -47,15 +48,13 @@ export function CreatePost() {
     setIsSubmitting(true);
 
     try {
-      console.log("token", token);
-
       const res = await fetch(`http://localhost:3001/post`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ content, topic }),
+        body: JSON.stringify({ content, topic, username }),
       });
 
       if (!res.ok) {
@@ -93,6 +92,13 @@ export function CreatePost() {
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
     >
       <div className="space-y-2">
+        <Input
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full"
+          maxLength={50}
+        />
         <Input
           placeholder="Topic"
           value={topic}
