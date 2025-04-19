@@ -20,11 +20,6 @@ import { LoginModal } from "./loginModal";
 
 const navItems = [
   {
-    path: "/home",
-    label: "Home",
-    icon: Home,
-  },
-  {
     path: "/feed",
     label: "Feed",
     icon: Coffee,
@@ -39,11 +34,6 @@ const navItems = [
     label: "Subscriptions",
     icon: Users,
   },
-  {
-    path: "/settings",
-    label: "Settings",
-    icon: Settings,
-  },
 ];
 
 export function SideNav() {
@@ -52,8 +42,8 @@ export function SideNav() {
   const [isMounted, setIsMounted] = useState(false);
   const [isSiginedIn, setIsSiginedIn] = useState(false);
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
+    const username = localStorage.getItem("username");
+    if (username) {
       setIsSiginedIn(true);
     } else {
       setIsSiginedIn(false);
@@ -163,7 +153,6 @@ export function SideNav() {
                   isExpanded ? "" : "justify-center"
                 )}
                 onClick={() => {
-                  localStorage.removeItem("token");
                   localStorage.removeItem("username");
                   localStorage.removeItem("id");
                   // refrech

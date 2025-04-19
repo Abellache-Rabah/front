@@ -29,14 +29,13 @@ export function SubscriptionManager() {
   // ---------------------
   useEffect(() => {
     async function fetchSubscriptions() {
-      const token = localStorage.getItem("token");
-      if (!token) return;
+      const username = localStorage.getItem("username");
+      if (!username) return;
       try {
         const res = await fetch(`${SERVER_URL}/subscription`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         });
         if (!res.ok) {
@@ -75,17 +74,17 @@ export function SubscriptionManager() {
     if (!newSubscription.trim()) return;
 
     try {
+      const username = localStorage.getItem("username");
       // Build request body depending on active tab.
       const body =
         activeTab === "users"
-          ? { username: newSubscription.trim() }
-          : { topic: newSubscription.trim() };
+          ? { username, susername: newSubscription.trim() }
+          : { topic: newSubscription.trim(), username };
 
       const res = await fetch(`${SERVER_URL}/subscription`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(body),
       });
@@ -132,14 +131,18 @@ export function SubscriptionManager() {
     name: string
   ) => {
     try {
+      const username = localStorage.getItem("username");
+      if (!username) return;
       // Build deletion body based on type.
-      const body = type === "user" ? { username: name } : { topic: name };
+      const body =
+        type === "user"
+          ? { username, susername: name }
+          : { username, topic: name };
 
       const res = await fetch(`${SERVER_URL}/subscription`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(body),
       });

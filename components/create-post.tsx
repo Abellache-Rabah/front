@@ -7,14 +7,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { useServer } from "@/hooks/use-server";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { motion } from "framer-motion";
 import { LoginModal } from "./loginModal";
 import { Input } from "./ui/input";
@@ -23,14 +15,13 @@ export function CreatePost() {
   const [topic, setTopic] = useState("");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
   const [username, setUsername] = useState("");
+  const { toast } = useToast();
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
     }
   }, []);
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,7 +43,6 @@ export function CreatePost() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ content, topic, username }),
       });
@@ -93,13 +83,6 @@ export function CreatePost() {
     >
       <div className="space-y-2">
         <Input
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full"
-          maxLength={50}
-        />
-        <Input
           placeholder="Topic"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
@@ -137,7 +120,7 @@ export function CreatePost() {
             ))}
           </SelectContent>
         </Select> */}
-        {token ? (
+        {username ? (
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               type="submit"

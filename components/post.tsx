@@ -17,9 +17,6 @@ export function Post({ post }: { post: any }) {
   const { toast } = useToast();
   useEffect(() => {
     const id = localStorage.getItem("id");
-    console.log("post.likes", post.likes);
-    console.log("id", id);
-    
     if (post.likes?.includes(id)) {
       setLiked(true);
     } else {
@@ -32,7 +29,7 @@ export function Post({ post }: { post: any }) {
     setLiked(newLiked);
     setLikeCount((prev) => prev + (newLiked ? 1 : -1));
 
-    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
     // Choose endpoint based on whether we're liking or unliking.
     const endpoint = newLiked ? "like" : "unlike";
     try {
@@ -40,8 +37,8 @@ export function Post({ post }: { post: any }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify({ username }),
       });
       if (!res.ok) {
         // If the server responds with an error, revert optimistic update.
